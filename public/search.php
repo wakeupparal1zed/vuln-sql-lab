@@ -10,7 +10,7 @@ if (preg_match('/union/i', $query)) {
 #надо time\bool
 ini_set('display_errors', 0); # больше не reflected ня
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT); # теперь не будет error based
-$sql = "SELECT id, qq FROM (SELECT id, qq FROM notsecret LIMIT 1) AS t WHERE qq = '$query'";#ААААААААЭАЭАЭАЭАЭВЭААЭВЫАЭАЭАЭ какой же костыль . ДААА ОНО ПОФИКСИЛО
+$sql = "SELECT id, qq FROM (SELECT id, qq FROM notsecret ) AS t WHERE qq = '$query'";#ААААААААЭАЭАЭАЭАЭВЭААЭВЫАЭАЭАЭ какой же костыль . ДААА ОНО ПОФИКСИЛО
 $stmt = $pdo->query($sql); 
 
 if ($stmt !== false) { 
