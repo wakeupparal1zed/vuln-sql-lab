@@ -8,13 +8,19 @@ if (preg_match('/union/i', $query)) {
 }#иначе sqlmap тут видит юнион иньекцию :( и да понимаю что блеклист не выход тк его можно обойти коментами--напримерUNION/*comment*/SELECT-- и регистром и тд и тп но тк у нас тут по тз условий таких не было я просто только от sqlmap это спрятал и норм если надо могу перелопатить
 
 #надо time\bool
-ini_set('display_errors', 0); # больше не reflected ня
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT); # теперь не будет error based
-$sql = "SELECT id, qq FROM (SELECT id, qq FROM notsecret ) AS t WHERE qq = '$query'";#ААААААААЭАЭАЭАЭАЭВЭААЭВЫАЭАЭАЭ какой же костыль . ДААА ОНО ПОФИКСИЛО
-$stmt = $pdo->query($sql); 
+ini_set('display_errors', 0);                 
+
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+
+$query = $_GET['search'] ?? '';
+
+$sql="SELECT id, qq FROM notsecret WHERE qq = '$query'";   #хз почему так но оно потом бежит мультиплаить запросы по другим колонкам потом проверить понять почему а пока хотфикс ямлом и ок
+
+$stmt = $pdo->query($sql);
+
 
 if ($stmt !== false) { 
-    $results = $stmt->fetch();
+    $results = $stmt->fetchAll();
 }   else { 
     $results = [];
 }
