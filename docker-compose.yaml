@@ -12,10 +12,10 @@ services:
       MYSQL_DATABASE: taskich
       MYSQL_USER: "123"
       MYSQL_PASSWORD: verysecurepasswordgagaga
-    command: # я хз но этим костылем уберем багулину что я наговнокодил потом желательно бы пофиксить (висит от слипа 5 секунд 30 ПОЧЕМУ ХЗ) ну вообщем пусть будет так работает и ок
-      --max_execution_time=5000  
+    command: 
+      --max_execution_time=2000  
       --max_connections=10       
-      --wait_timeout=5          
+      --wait_timeout=2          
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
