@@ -1,3 +1,3 @@
-docker compose down \
-  && docker compose up -d --build
-
+set -e
+docker compose down
+docker compose up -d --build

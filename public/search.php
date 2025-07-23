@@ -10,12 +10,11 @@ if (preg_match('/union/i', $query)) {
 #надо time\bool
 ini_set('display_errors', 0); # больше не reflected ня
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT); # теперь не будет error based
-$sql = "SELECT id, qq FROM notsecret WHERE qq = '$query' LIMIT 1";#ну по идее дамп всего пофиксил лимитом хз как на деле(or 1=1 больше не должно показать все потом речекнуть) 
+$sql = "SELECT id, qq FROM (SELECT id, qq FROM notsecret LIMIT 1) AS t WHERE qq = '$query'";#ААААААААЭАЭАЭАЭАЭВЭААЭВЫАЭАЭАЭ какой же костыль . ДААА ОНО ПОФИКСИЛО
 $stmt = $pdo->query($sql); 
 
-
 if ($stmt !== false) { 
-    $results = $stmt->fetchAll();
+    $results = $stmt->fetch();
 }   else { 
     $results = [];
 }
