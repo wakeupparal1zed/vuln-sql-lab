@@ -29,5 +29,5 @@ if ($check == 0) {
     $pdo->exec("INSERT INTO notsecret (id, qq) VALUES
         (1, 'notsecret1'), (2, 'notsecret2'), (3, 'notsecret3'),(4, 'notsecret4'), (5, 'notsecret5'), (6, 'notsecret6'),(7, 'notsecret7'), (8, 'notsecret8'), (9, 'notsecret9'),(10, 'notsecret10')");
         
-    $pdo->exec("INSERT INTO secret VALUES (1, 'flag{ireallywantagoodplaceatkasperskyifyoucanhelpiwillappreciatethat}')");
+    $pdo->exec("INSERT INTO secret VALUES (1, 'flag{ihopeicangetaninternship}')");
 }
