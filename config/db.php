@@ -24,7 +24,7 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS secret (
     qq VARCHAR(255) NOT NULL
 )");
 
-$check = $pdo->query("SELECT COUNT(*) FROM notsecret")->fetchColumn();#fix later
+$check = $pdo->query("SELECT COUNT(*) FROM notsecret")->fetchColumn();#fix later уже забыл че тут вообще написано
 if ($check == 0) {
     $pdo->exec("INSERT INTO notsecret (id, qq) VALUES
         (1, 'notsecret1'), (2, 'notsecret2'), (3, 'notsecret3'),(4, 'notsecret4'), (5, 'notsecret5'), (6, 'notsecret6'),(7, 'notsecret7'), (8, 'notsecret8'), (9, 'notsecret9'),(10, 'notsecret10')");

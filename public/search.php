@@ -14,7 +14,7 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
 $query = $_GET['search'] ?? '';
 
-$sql="SELECT id, qq FROM notsecret WHERE qq = '$query'";   #хз почему так но оно потом бежит мультиплаить запросы по другим колонкам потом проверить понять почему а пока хотфикс ямлом и ок
+$sql="SELECT id, qq FROM notsecret WHERE qq = '$query'";   #
 
 $stmt = $pdo->query($sql);
 
