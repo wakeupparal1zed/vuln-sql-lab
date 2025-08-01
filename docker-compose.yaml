@@ -9,7 +9,6 @@ services:
     command: >
       --default-authentication-plugin=mysql_native_password
       --secure-file-priv=""
-    container_name: vuln-mysql
     restart: unless-stopped
     ports:
       - "1337:3306"
