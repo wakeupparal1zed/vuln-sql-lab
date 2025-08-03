@@ -1,3 +1,6 @@
+volumes:
+  shared:
+
 services:
   db:
     image: postgres:16
@@ -6,14 +9,15 @@ services:
       POSTGRES_PASSWORD: verysecurepasswordgagaga
       POSTGRES_DB: taskich
     volumes:
-      - shared:/var/lib/postgresql/data/files
+      - shared:/var/lib/postgresql/data/files           
 
   php:
     build: .
     depends_on:
       - db
+    working_dir: /app
+    command: php -S 0.0.0.0:8080 -t /app/public
+    ports:
+      - "8080:8080"
     volumes:
-      - shared:/app/public/uploads
-
-volumes:
-  shared:
+      - shared:/app/public/uploads                     
