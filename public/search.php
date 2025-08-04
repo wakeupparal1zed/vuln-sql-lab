@@ -1,48 +1,35 @@
 <?php
-require_once __DIR__ . '/../config/db.php';
+$host = 'db';
+$port = '5432';
+$dbname = 'taskich';
+$user = 'pguser';
+$password = 'verysecurepasswordgagaga';
 
-$query = $_GET['search'];
-#убрал под удобство для rce
+$pdo = new PDO(
+    "pgsql:host=$host;port=$port;dbname=$dbname",
+    $user,
+    $password,
+    [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ]
+);
 
-#иначе sqlmap тут видит юнион иньекцию :( и да понимаю что блеклист не выход тк его можно обойти коментами--напримерUNION/*comment*/SELECT-- и регистром и тд и тп но тк у нас тут по тз условий таких не было я просто только от sqlmap это спрятал и норм если надо могу перелопатить
+$pdo->exec("
+CREATE TABLE IF NOT EXISTS notsecret(
+    id SERIAL PRIMARY KEY,
+    qq TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS secret(
+    id SERIAL PRIMARY KEY,
+    qq TEXT NOT NULL
+);
+");
 
-#надо time\bool
-ini_set('display_errors', 0);                 
-
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
-
-$query = $_GET['search'] ?? '';
-
-$sql="SELECT id, qq FROM notsecret WHERE qq = '$query'";   #
-
-$stmt = $pdo->query($sql);
-
-
-if ($stmt !== false) { 
-    $results = $stmt->fetchAll();
-}   else { 
-    $results = [];
+if ($pdo->query('SELECT COUNT(*) FROM notsecret')->fetchColumn() == 0) {
+    $ins = $pdo->prepare('INSERT INTO notsecret(qq) VALUES(:qq)');
+    for ($i = 1; $i <= 10; $i++) $ins->execute([':qq' => \"notsecret$i\"]);
+    $pdo->prepare('INSERT INTO secret(qq) VALUES(:qq)')
+        ->execute([':qq' => 'flag{ihopeicangetaninternship}']);
 }
-#у нас же все безопасно поэтому экранируем наш поиск енкодом хтмлы
-?>
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <title>Результаты поиска</title>
-</head>
-<body>
-    <h1>Результаты для «<?= htmlspecialchars($query) ?>»</h1>
-    <?php if (!$results): ?>
-        <p>Ничего не найдено.</p>
-    <?php else: ?>
-         <ul>
-    <?php foreach ($results as $row): ?>
-        <li>ID: <?= htmlspecialchars($row['id']) ?>
-            — <?= htmlspecialchars($row['qq']) ?></li>
-    <?php endforeach; ?>
-    </ul>
-    <?php endif; ?>
-    <a href="index.php"> Новый поиск</a>
-</body>
-</html>
