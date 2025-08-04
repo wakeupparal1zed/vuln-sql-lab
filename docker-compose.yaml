@@ -10,15 +10,14 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
 
-  php:
+  web:
     build: .
+    ports:
+      - "8080:80"
     depends_on:
       - db
-    environment:
-      DB_USER: pguser
-      DB_PASSWORD: verysecurepasswordgagaga
     volumes:
-      - .:/app
+      - .:/var/www/html
 
 volumes:
   postgres:
