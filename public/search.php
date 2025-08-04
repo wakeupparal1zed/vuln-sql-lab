@@ -1,35 +1,22 @@
 <?php
-$host = 'db';
-$port = '5432';
-$dbname = 'taskich';
-$user = 'pguser';
-$password = 'verysecurepasswordgagaga';
+require __DIR__.'/../config/db.php';
 
-$pdo = new PDO(
-    "pgsql:host=$host;port=$port;dbname=$dbname",
-    $user,
-    $password,
-    [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ]
-);
-
-$pdo->exec("
-CREATE TABLE IF NOT EXISTS notsecret(
-    id SERIAL PRIMARY KEY,
-    qq TEXT NOT NULL
-);
-CREATE TABLE IF NOT EXISTS secret(
-    id SERIAL PRIMARY KEY,
-    qq TEXT NOT NULL
-);
-");
-
-if ($pdo->query('SELECT COUNT(*) FROM notsecret')->fetchColumn() == 0) {
-    $ins = $pdo->prepare('INSERT INTO notsecret(qq) VALUES(:qq)');
-    for ($i = 1; $i <= 10; $i++) $ins->execute([':qq' => \"notsecret$i\"]);
-    $pdo->prepare('INSERT INTO secret(qq) VALUES(:qq)')
-        ->execute([':qq' => 'flag{ihopeicangetaninternship}']);
-}
+$q = $_GET['search'] ?? '';
+$stmt = $pdo->prepare('SELECT id, qq FROM notsecret WHERE qq ILIKE :q');
+$stmt->execute([':q' => $q]);
+$results = $stmt->fetchAll();
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>Результаты</title></head>
+<body>
+<h1>Результаты для «<?= htmlspecialchars($q) ?>»</h1>
+<?php if (!$results): ?>
+<p>Ничего не найдено.</p>
+<?php else: ?><ul>
+<?php foreach ($results as $row): ?>
+<li>ID: <?= htmlspecialchars($row['id']) ?> — <?= htmlspecialchars($row['qq']) ?></li>
+<?php endforeach; ?></ul><?php endif; ?>
+<a href="index.php">Новый поиск</a>
+</body>
+</html>
