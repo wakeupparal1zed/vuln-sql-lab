@@ -6,6 +6,7 @@ services:
       POSTGRES_PASSWORD: verysecurepasswordgagaga
       POSTGRES_DB: taskich
     volumes:
+      - project:/var/www/html
       - postgres:/var/lib/postgresql/data
 
   app:
@@ -15,7 +16,8 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/var/www/html
+      - project:/var/www/html
 
 volumes:
   postgres:
+  project:
