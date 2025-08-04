@@ -1,12 +1,6 @@
-FROM php:8.2-cli
+FROM php:8.3-fpm
 
-RUN apt-get update && apt-get install -y libpq-dev \
- && docker-php-ext-install pdo_pgsql
- 
-
-RUN docker-php-ext-install pdo_mysql pdo_pgsql
+RUN docker-php-ext-install pdo_pgsql pgsql
 
 WORKDIR /app
 COPY . /app
-
-RUN echo "allow_url_fopen=On" > /usr/local/etc/php/conf.d/zz-allow-url.ini
